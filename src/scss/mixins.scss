@@ -1,0 +1,33 @@
+@mixin m($margin) {
+  margin: $margin;
+}
+
+@mixin p($padding) {
+  padding: $padding;
+}
+
+@mixin my($margin) {
+  @include mr($margin);
+  @include ml($margin);
+}
+
+@mixin mt($margin) {
+  margin-top: $margin;
+}
+
+@mixin mr($margin) {
+  margin-right: $margin;
+}
+
+@mixin ml($margin) {
+  margin-left: $margin;
+}
+
+@mixin mb($margin) {
+  margin-bottom: $margin;
+}
+
+@mixin border($size, $color) {
+  border: $size solid $color;
+  border-radius: 10px;
+}
