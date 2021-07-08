@@ -1,49 +1,38 @@
 <template>
   <div id="app">
     <section class="form-section">
-      <form class="patient-form">
+      <form @submit.prevent="submit" class="patient-form">
         <div class="form-text-inputs">
-          <label class="form-label sr-only" for="lastName">Фамилия</label
-          ><input
-            type="text"
-            class="text-field form-text-input"
-            id="lastName"
-            placeholder="Фамилия"
+          <TextField
+            :id="'lastName'"
+            :placeholder="'Фамилия'"
+            :v="$v.lastName"
             v-model="lastName"
           />
-          <label class="form-label sr-only" for="firstName">Имя</label
-          ><input
-            type="text"
-            class="text-field form-text-input"
-            id="firstName"
-            placeholder="Имя"
+          <TextField
+            :id="'firstName'"
+            :placeholder="'Имя'"
+            :v="$v.firstName"
             v-model="firstName"
           />
-          <label class="form-label sr-only" for="patronymic">Отчество</label
-          ><input
-            type="text"
-            class="text-field form-text-input"
-            id="patronymic"
-            placeholder="Отчество"
+          <TextField
+            :id="'patronymic'"
+            :placeholder="'Отчество'"
+            :v="$v.patronymic"
             v-model="patronymic"
           />
-          <label class="form-label sr-only" for="birthDate">Дата рождения</label
-          ><input
-            type="text"
-            class="text-field form-text-input"
-            id="birthDate"
-            placeholder="Дата рождения"
+          <TextField
+            :id="'birthDate'"
+            :placeholder="'Дата рождения'"
+            :v="$v.birthDate"
             v-model="birthDate"
           />
-          <label class="form-label sr-only" for="phone">Номер телефона</label
-          ><input
-            type="text"
-            class="text-field form-text-input"
-            id="phone"
-            placeholder="Номер телефона"
+          <TextField
+            :id="'phone'"
+            :placeholder="'Номер телефона'"
+            :v="$v.phone"
             v-model="phone"
           />
-          <div class="error" v-if="$v.phone.$error">Field B is required.</div>
         </div>
         <fieldset>
           <legend>Пол</legend>
@@ -82,7 +71,7 @@
         </select>
         <label class="form-label" for="noSms">Не отправлять СМС</label
         ><input type="checkbox" id="noSms" v-model="noSms" />
-        <div class="button" @click="submit">Создать</div>
+        <button class="button" type="submit">Создать</button>
       </form>
     </section>
   </div>
@@ -96,6 +85,7 @@ import {
   minLength,
   maxLength,
 } from "vuelidate/lib/validators";
+import TextField from "./components/TextField.vue";
 
 const isFirstCharSeven = (value) => Number(value[0]) === 7;
 
@@ -114,6 +104,9 @@ export default {
       noSms: false,
     };
   },
+  components: {
+    TextField,
+  },
   validations: {
     lastName: { required },
     firstName: { required },
@@ -127,8 +120,7 @@ export default {
     tags: { required },
   },
   methods: {
-    submit(e) {
-      e.preventDefault();
+    submit() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
         alert("Клиент успешно создан!"); // eslint-disable-line no-alert
@@ -141,13 +133,8 @@ export default {
 
 <style lang="scss">
 @import "./scss/mixins.scss";
+@import "./scss/colors.scss";
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;400&display=swap");
-
-$imperial-red: #e63946ff;
-$honeydew: #f1faeeff;
-$powder-blue: #a8dadcff;
-$celadon-blue: #457b9dff;
-$prussian-blue: #1d3557ff;
 
 body {
   @include py(50px);
@@ -163,10 +150,6 @@ fieldset {
   @include p(0);
 }
 
-.sr-only {
-  display: none;
-}
-
 .patient-form {
   @include mx(auto);
   @include p(25px);
@@ -180,31 +163,6 @@ fieldset {
   flex-wrap: wrap;
   grid-row-gap: 20px;
   grid-column-gap: 20px;
-}
-.form-text-input {
-  @include p(5px);
-  flex: 1 1 350px;
-  box-sizing: border-box;
-  padding: 24px;
-}
-
-.text-field {
-  @include p(10px);
-  @include border(2px, $prussian-blue);
-
-  &:focus-visible {
-    outline: none;
-    @include border(2px, $celadon-blue);
-  }
-
-  &:hover {
-    @include border(2px, $celadon-blue);
-  }
-}
-
-.text-field::placeholder {
-  font-family: "Roboto", sans-serif;
-  text-transform: uppercase;
 }
 
 .button {
