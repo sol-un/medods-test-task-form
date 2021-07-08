@@ -5,12 +5,13 @@
     </label>
     <input
       type="text"
-      v-model="input"
-      :class="['text-field', { 'has-error': v.$error }]"
+      :class="['text-field', { 'has-error': hasError }]"
       :id="id"
       :placeholder="placeholder"
+      :value="value"
+      @input="$emit('input', $event.target.value)"
     />
-    <div class="error" v-if="v.$error">
+    <div class="error" v-if="hasError">
       {{ `${placeholder} – обязательное поле!` }}
     </div>
   </div>
@@ -23,21 +24,7 @@ export default {
     value: String,
     id: String,
     placeholder: String,
-    v: {
-      type: Object,
-      default: () => ({}),
-    },
-  },
-  computed: {
-    input: {
-      get() {
-        return this.value;
-      },
-      set(value) {
-        this.v.$touch();
-        this.$emit("input", value);
-      },
-    },
+    hasError: Boolean,
   },
 };
 </script>

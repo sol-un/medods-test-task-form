@@ -6,32 +6,36 @@
           <TextField
             :id="'lastName'"
             :placeholder="'Фамилия'"
-            :v="$v.lastName"
-            v-model="lastName"
+            :hasError="$v.lastName.$error"
+            :value="lastName"
+            @input="lastName = $event"
           />
           <TextField
             :id="'firstName'"
             :placeholder="'Имя'"
-            :v="$v.firstName"
-            v-model="firstName"
+            :hasError="$v.firstName.$error"
+            :value="firstName"
+            @input="firstName = $event"
           />
           <TextField
             :id="'patronymic'"
             :placeholder="'Отчество'"
-            :v="$v.patronymic"
-            v-model="patronymic"
+            :value="patronymic"
+            @input="patronymic = $event"
           />
           <TextField
             :id="'birthDate'"
             :placeholder="'Дата рождения'"
-            :v="$v.birthDate"
-            v-model="birthDate"
+            :hasError="$v.birthDate.$error"
+            :value="birthDate"
+            @input="birthDate = $event"
           />
           <TextField
             :id="'phone'"
             :placeholder="'Номер телефона'"
-            :v="$v.phone"
-            v-model="phone"
+            :hasError="$v.phone.$error"
+            :value="phone"
+            @input="phone = $event"
           />
         </div>
         <fieldset>
