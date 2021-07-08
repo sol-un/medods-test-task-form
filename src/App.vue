@@ -21,6 +21,7 @@
             :id="'patronymic'"
             :placeholder="'Отчество'"
             :value="patronymic"
+            :hasError="$v.patronymic.$error"
             @input="patronymic = $event"
           />
           <TextField
@@ -38,35 +39,26 @@
             @input="phone = $event"
           />
         </div>
-        <fieldset>
-          <legend>Пол</legend>
-          <label>
-            Жен.
-            <input
-              name="sex"
-              value="Жен."
-              type="radio"
-              id="female"
-              v-model="sex"
-            />
-          </label>
-          <label>
-            Муж.
-            <input
-              name="sex"
-              value="Муж."
-              type="radio"
-              id="male"
-              v-model="sex"
-            />
-          </label>
-        </fieldset>
-        <label class="form-label" for="tags">Группа клиентов</label>
-        <select id="tags" v-model="tags" multiple>
-          <option value="VIP">VIP</option>
-          <option value="Проблемные">Проблемные</option>
-          <option value="ОМС">ОМС</option>
-        </select>
+        <div class="form-radio-inputs">
+          <span class="text-transform-uppercase"> Пол: </span>
+          <Radio
+            :name="'sex'"
+            :id="'male'"
+            :value="'Муж'"
+            :isChecked="sex === 'Муж'"
+            v-model="sex"
+            @change="sex = $event"
+          />
+          <Radio
+            :name="'sex'"
+            :id="'female'"
+            :value="'Жен'"
+            :isChecked="sex === 'Жен'"
+            v-model="sex"
+            @change="sex = $event"
+          />
+        </div>
+        <Select />
         <label class="form-label" for="attendingDr">Лечащий врач</label>
         <select id="attendingDr" v-model="attendingDr">
           <option value="Иванов">Иванов</option>
@@ -90,6 +82,8 @@ import {
   maxLength,
 } from "vuelidate/lib/validators";
 import TextField from "./components/TextField.vue";
+import Radio from "./components/Radio.vue";
+import Select from "./components/Select.vue";
 
 const isFirstCharSeven = (value) => Number(value[0]) === 7;
 
@@ -110,6 +104,8 @@ export default {
   },
   components: {
     TextField,
+    Radio,
+    Select,
   },
   validations: {
     lastName: { required },
@@ -121,6 +117,7 @@ export default {
       minLength: minLength(11),
       maxLength: maxLength(11),
     },
+    patronymic: {},
     tags: { required },
   },
   methods: {
@@ -148,10 +145,8 @@ body {
   font-family: "Roboto", sans-serif;
 }
 
-fieldset {
-  border: 0;
-  @include m(0);
-  @include p(0);
+.text-transform-uppercase {
+  @include uppercase;
 }
 
 .patient-form {
@@ -160,6 +155,12 @@ fieldset {
   @include border(2px, $prussian-blue);
   max-width: 800px;
   background: $honeydew;
+}
+
+.form-radio-inputs {
+  @include mx(auto);
+  @include my(50px);
+  width: fit-content;
 }
 
 .form-text-inputs {
@@ -171,7 +172,7 @@ fieldset {
 
 .button {
   @include mx(auto);
+  @include uppercase;
   width: fit-content;
-  text-transform: uppercase;
 }
 </style>

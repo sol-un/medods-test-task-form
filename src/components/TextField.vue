@@ -24,7 +24,10 @@ export default {
     value: String,
     id: String,
     placeholder: String,
-    hasError: Boolean,
+    hasError: {
+      type: Boolean,
+      default: false,
+    },
   },
 };
 </script>
@@ -55,11 +58,11 @@ export default {
   &.has-error {
     @include border(2px, $imperial-red);
   }
-}
 
-.text-field::placeholder {
-  font-family: "Roboto", sans-serif;
-  text-transform: uppercase;
+  &::placeholder {
+    font-family: "Roboto", sans-serif;
+    text-transform: uppercase;
+  }
 }
 
 .form-text-input {
