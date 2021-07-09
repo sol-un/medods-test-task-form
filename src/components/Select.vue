@@ -1,26 +1,81 @@
 <template>
-  <label class="form-label" for="tags"
-    >Группа клиентов
-    <select id="tags" v-model="tags" multiple>
-      <option value="VIP">VIP</option>
-      <option value="Проблемные">Проблемные</option>
-      <option value="ОМС">ОМС</option>
-    </select>
-  </label>
+  <div class="container">
+    <label class="form-label" :for="id"
+      >{{ label }}
+      <select
+        :id="id"
+        :multiple="multiple"
+        @input="$emit('input', $event.target.value)"
+      >
+        <option value="" v-if="firstOptionEmpty"></option>
+        <option v-for="(value, key) in data" :key="key" :value="key">
+          {{ value }}
+        </option>
+      </select>
+    </label>
+    <div class="error" v-if="hasError">
+      {{ `${label} ${errorMsg}` }}
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
   name: "Select",
-  model: {
-    prop: "option",
-    event: "change",
-  },
   props: {
-    value: String,
-    name: String,
     id: String,
-    isChecked: Boolean,
+    label: String,
+    data: Object,
+    hasError: {
+      type: Boolean,
+      default: false,
+    },
+    errorMsg: {
+      type: String,
+      default: "содержит ошибку!",
+    },
+    multiple: {
+      type: Boolean,
+      default: false,
+    },
+    firstOptionEmpty: {
+      type: Boolean,
+      default: false,
+    },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+@import "../scss/mixins.scss";
+@import "../scss/colors.scss";
+
+.container {
+  @include mx(auto);
+  position: relative;
+  width: fit-content;
+}
+
+label {
+  @include uppercase;
+  display: block;
+}
+
+select {
+  @include p(5px);
+  @include mx(auto);
+  @include my(5px);
+  display: block;
+  width: 100%;
+
+  &:focus-visible {
+    outline: none;
+  }
+}
+
+.error {
+  position: absolute;
+  color: $imperial-red;
+  font-size: 10px;
+}
+</style>

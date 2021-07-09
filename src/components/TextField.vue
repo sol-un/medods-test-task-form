@@ -1,18 +1,18 @@
 <template>
   <div class="form-text-input">
     <label class="sr-only" :for="id">
-      {{ placeholder }}
+      {{ label }}
     </label>
     <input
       type="text"
       :class="['text-field', { 'has-error': hasError }]"
       :id="id"
-      :placeholder="placeholder"
+      :placeholder="label"
       :value="value"
       @input="$emit('input', $event.target.value)"
     />
     <div class="error" v-if="hasError">
-      {{ `${placeholder} – обязательное поле!` }}
+      {{ `${label} ${errorMsg}` }}
     </div>
   </div>
 </template>
@@ -23,7 +23,11 @@ export default {
   props: {
     value: String,
     id: String,
-    placeholder: String,
+    label: String,
+    errorMsg: {
+      type: String,
+      default: "содержит ошибку!",
+    },
     hasError: {
       type: Boolean,
       default: false,
@@ -32,7 +36,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "../scss/mixins.scss";
 @import "../scss/colors.scss";
 
@@ -42,34 +46,46 @@ export default {
 
 .text-field {
   @include p(10px);
-  @include border(2px, $prussian-blue);
+  @include border(1px, $prussian-blue);
   width: 100%;
   box-sizing: border-box;
 
   &:hover {
-    @include border(2px, $celadon-blue);
+    @include border(1px, $celadon-blue);
+
+    &::placeholder {
+      color: $celadon-blue;
+    }
   }
 
   &:focus-visible {
     outline: none;
-    @include border(2px, $celadon-blue);
+
+    &::placeholder {
+      color: white;
+    }
   }
 
   &.has-error {
-    @include border(2px, $imperial-red);
+    @include border(1px, $imperial-red);
   }
 
   &::placeholder {
     font-family: "Roboto", sans-serif;
     text-transform: uppercase;
+    color: $prussian-blue;
   }
 }
 
 .form-text-input {
+  position: relative;
   flex: 1 1 350px;
 }
 
 .error {
+  position: absolute;
+  left: 10px;
   color: $imperial-red;
+  font-size: 10px;
 }
 </style>

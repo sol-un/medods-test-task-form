@@ -1,52 +1,55 @@
 <template>
   <div id="app">
-    <section class="form-section">
-      <form @submit.prevent="submit" class="patient-form">
-        <div class="form-text-inputs">
-          <TextField
-            :id="'lastName'"
-            :placeholder="'Фамилия'"
-            :hasError="$v.lastName.$error"
-            :value="lastName"
-            @input="lastName = $event"
-          />
-          <TextField
-            :id="'firstName'"
-            :placeholder="'Имя'"
-            :hasError="$v.firstName.$error"
-            :value="firstName"
-            @input="firstName = $event"
-          />
-          <TextField
-            :id="'patronymic'"
-            :placeholder="'Отчество'"
-            :value="patronymic"
-            :hasError="$v.patronymic.$error"
-            @input="patronymic = $event"
-          />
-          <TextField
-            :id="'birthDate'"
-            :placeholder="'Дата рождения'"
-            :hasError="$v.birthDate.$error"
-            :value="birthDate"
-            @input="birthDate = $event"
-          />
-          <TextField
-            :id="'phone'"
-            :placeholder="'Номер телефона'"
-            :hasError="$v.phone.$error"
-            :value="phone"
-            @input="phone = $event"
-          />
-        </div>
-        <div class="form-radio-inputs">
+    <form @submit.prevent="submit" class="patient-form">
+      <div class="form-group text-inputs-group">
+        <TextField
+          :id="'lastName'"
+          :label="'Фамилия'"
+          :hasError="$v.lastName.$error"
+          :errorMsg="'не может быть пустой!'"
+          :value="lastName"
+          @input="lastName = $event"
+        />
+        <TextField
+          :id="'firstName'"
+          :label="'Имя'"
+          :hasError="$v.firstName.$error"
+          :errorMsg="'не может быть пустым!'"
+          :value="firstName"
+          @input="firstName = $event"
+        />
+        <TextField
+          :id="'patronymic'"
+          :label="'Отчество'"
+          :value="patronymic"
+          :hasError="$v.patronymic.$error"
+          @input="patronymic = $event"
+        />
+        <TextField
+          :id="'birthDate'"
+          :label="'Дата рождения'"
+          :hasError="$v.birthDate.$error"
+          :errorMsg="'не может быть пустой!'"
+          :value="birthDate"
+          @input="birthDate = $event"
+        />
+        <TextField
+          :id="'phone'"
+          :label="'Номер телефона'"
+          :hasError="$v.phone.$error"
+          :errorMsg="'не может быть пустым, состоит из 11 цифр и начинается с 7!'"
+          :value="phone"
+          @input="phone = $event"
+        />
+      </div>
+      <div class="form-group">
+        <div class="radio-group">
           <span class="text-transform-uppercase"> Пол: </span>
           <Radio
             :name="'sex'"
             :id="'male'"
             :value="'Муж'"
             :isChecked="sex === 'Муж'"
-            v-model="sex"
             @change="sex = $event"
           />
           <Radio
@@ -54,22 +57,39 @@
             :id="'female'"
             :value="'Жен'"
             :isChecked="sex === 'Жен'"
-            v-model="sex"
             @change="sex = $event"
           />
         </div>
-        <Select />
-        <label class="form-label" for="attendingDr">Лечащий врач</label>
-        <select id="attendingDr" v-model="attendingDr">
-          <option value="Иванов">Иванов</option>
-          <option value="Захаров">Захаров</option>
-          <option value="Чернышева">Чернышева</option>
-        </select>
-        <label class="form-label" for="noSms">Не отправлять СМС</label
-        ><input type="checkbox" id="noSms" v-model="noSms" />
-        <button class="button" type="submit">Создать</button>
-      </form>
-    </section>
+      </div>
+      <div class="form-group">
+        <div class="list-group">
+          <Select
+            :label="'Группа клиентов'"
+            :id="'tags'"
+            :hasError="$v.tags.$error"
+            :errorMsg="'не может быть пустой!'"
+            :data="data.tags"
+            v-model="tags"
+            :multiple="true"
+          />
+          <Select
+            :label="'Лечащий врач'"
+            :id="'attendingDr'"
+            :data="data.doctors"
+            v-model="attendingDr"
+            :firstOptionEmpty="true"
+          />
+        </div>
+      </div>
+      <div class="form-group">
+        <Checkbox
+          :label="'Не отправлять СМС'"
+          :id="'noSms'"
+          @change="noSms = $event"
+        />
+      </div>
+      <Button :text="'Создать'" />
+    </form>
   </div>
 </template>
 
@@ -84,13 +104,29 @@ import {
 import TextField from "./components/TextField.vue";
 import Radio from "./components/Radio.vue";
 import Select from "./components/Select.vue";
+import Checkbox from "./components/Checkbox.vue";
+import Button from "./components/Button.vue";
 
 const isFirstCharSeven = (value) => Number(value[0]) === 7;
+
+const data = {
+  tags: {
+    VIP: "VIP",
+    Проблемные: "Проблемные",
+    ОМС: "ОМС",
+  },
+  doctors: {
+    Иванов: "Иванов",
+    Захаров: "Захаров",
+    Чернышева: "Чернышева",
+  },
+};
 
 export default {
   name: "App",
   data() {
     return {
+      data,
       lastName: "",
       firstName: "",
       patronymic: "",
@@ -106,6 +142,8 @@ export default {
     TextField,
     Radio,
     Select,
+    Checkbox,
+    Button,
   },
   validations: {
     lastName: { required },
@@ -145,6 +183,26 @@ body {
   font-family: "Roboto", sans-serif;
 }
 
+.form-group {
+  @include py(25px);
+}
+
+.text-inputs-group {
+  display: flex;
+  flex-wrap: wrap;
+  grid-row-gap: 25px;
+  grid-column-gap: 25px;
+}
+
+.radio-group {
+  @include mx(auto);
+  width: fit-content;
+}
+
+.list-group {
+  display: flex;
+}
+
 .text-transform-uppercase {
   @include uppercase;
 }
@@ -155,19 +213,6 @@ body {
   @include border(2px, $prussian-blue);
   max-width: 800px;
   background: $honeydew;
-}
-
-.form-radio-inputs {
-  @include mx(auto);
-  @include my(50px);
-  width: fit-content;
-}
-
-.form-text-inputs {
-  display: flex;
-  flex-wrap: wrap;
-  grid-row-gap: 20px;
-  grid-column-gap: 20px;
 }
 
 .button {
