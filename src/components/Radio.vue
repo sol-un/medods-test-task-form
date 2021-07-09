@@ -32,7 +32,7 @@ export default {
 @import "../scss/colors.scss";
 
 label {
-  @include p(5px);
+  @include p(10px);
   @include uppercase;
   position: relative;
   text-transform: uppercase;

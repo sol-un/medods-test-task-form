@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <label class="form-label" :for="id"
-      >{{ label }}
+      >{{ `${label}${isRequired ? "*" : ""}` }}
       <select
         :id="id"
         :multiple="multiple"
@@ -14,7 +14,7 @@
       </select>
     </label>
     <div class="error" v-if="hasError">
-      {{ `${label} ${errorMsg}` }}
+      {{ errorMsg }}
     </div>
   </div>
 </template>
@@ -32,13 +32,17 @@ export default {
     },
     errorMsg: {
       type: String,
-      default: "содержит ошибку!",
+      default: "Содержит ошибку!",
     },
     multiple: {
       type: Boolean,
       default: false,
     },
     firstOptionEmpty: {
+      type: Boolean,
+      default: false,
+    },
+    isRequired: {
       type: Boolean,
       default: false,
     },

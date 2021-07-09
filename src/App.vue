@@ -1,95 +1,189 @@
 <template>
   <div id="app">
-    <form @submit.prevent="submit" class="patient-form">
-      <div class="form-group text-inputs-group">
-        <TextField
-          :id="'lastName'"
-          :label="'Фамилия'"
-          :hasError="$v.lastName.$error"
-          :errorMsg="'не может быть пустой!'"
-          :value="lastName"
-          @input="lastName = $event"
-        />
-        <TextField
-          :id="'firstName'"
-          :label="'Имя'"
-          :hasError="$v.firstName.$error"
-          :errorMsg="'не может быть пустым!'"
-          :value="firstName"
-          @input="firstName = $event"
-        />
-        <TextField
-          :id="'patronymic'"
-          :label="'Отчество'"
-          :value="patronymic"
-          :hasError="$v.patronymic.$error"
-          @input="patronymic = $event"
-        />
-        <TextField
-          :id="'birthDate'"
-          :label="'Дата рождения'"
-          :hasError="$v.birthDate.$error"
-          :errorMsg="'не может быть пустой!'"
-          :value="birthDate"
-          @input="birthDate = $event"
-        />
-        <TextField
-          :id="'phone'"
-          :label="'Номер телефона'"
-          :hasError="$v.phone.$error"
-          :errorMsg="'не может быть пустым, состоит из 11 цифр и начинается с 7!'"
-          :value="phone"
-          @input="phone = $event"
-        />
-      </div>
-      <div class="form-group">
-        <div class="radio-group">
-          <span class="text-transform-uppercase"> Пол: </span>
-          <Radio
-            :name="'sex'"
-            :id="'male'"
-            :value="'Муж'"
-            :isChecked="sex === 'Муж'"
-            @change="sex = $event"
-          />
-          <Radio
-            :name="'sex'"
-            :id="'female'"
-            :value="'Жен'"
-            :isChecked="sex === 'Жен'"
-            @change="sex = $event"
-          />
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="list-group">
+    <div class="patient-form">
+      <h1>Новый клиент</h1>
+      <form @submit.prevent="submit">
+        <fieldset>
+          <legend><h2>Общие сведения</h2></legend>
+          <div class="form-group text-inputs-group">
+            <TextField
+              :id="'lastName'"
+              :label="'Фамилия'"
+              :hasError="$v.lastName.$error"
+              :errorMsg="messages.required"
+              :value="lastName"
+              :isRequired="true"
+              @input="lastName = $event"
+            />
+            <TextField
+              :id="'firstName'"
+              :label="'Имя'"
+              :hasError="$v.firstName.$error"
+              :errorMsg="messages.required"
+              :value="firstName"
+              :isRequired="true"
+              @input="firstName = $event"
+            />
+            <TextField
+              :id="'patronymic'"
+              :label="'Отчество'"
+              :value="patronymic"
+              @input="patronymic = $event"
+            />
+            <TextField
+              :id="'birthDate'"
+              :label="'Дата рождения'"
+              :hasError="$v.birthDate.$error"
+              :errorMsg="messages.required"
+              :value="birthDate"
+              :isRequired="true"
+              @input="birthDate = $event"
+            />
+            <TextField
+              :id="'phone'"
+              :label="'Номер телефона'"
+              :hasError="$v.phone.$error"
+              :errorMsg="messages.phone"
+              :value="phone"
+              :isRequired="true"
+              @input="phone = $event"
+            />
+          </div>
+          <div class="form-group text-align-center">
+            <span class="text-transform-uppercase">Пол</span>
+            <div class="radio-group">
+              <Radio
+                :name="'sex'"
+                :id="'male'"
+                :value="'Муж'"
+                :isChecked="sex === 'Муж'"
+                @change="sex = $event"
+              />
+              <Radio
+                :name="'sex'"
+                :id="'female'"
+                :value="'Жен'"
+                :isChecked="sex === 'Жен'"
+                @change="sex = $event"
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="list-group">
+              <Select
+                :label="'Группа клиентов'"
+                :id="'tags'"
+                :hasError="$v.tags.$error"
+                :errorMsg="messages.required"
+                :data="data.tags"
+                :isRequired="true"
+                :multiple="true"
+                v-model="tags"
+              />
+              <Select
+                :label="'Лечащий врач'"
+                :id="'attendingDr'"
+                :data="data.doctors"
+                v-model="attendingDr"
+                :firstOptionEmpty="true"
+              />
+            </div>
+          </div>
+          <div class="form-group last">
+            <Checkbox
+              :label="'Не отправлять СМС'"
+              :id="'noSms'"
+              @change="noSms = $event"
+            />
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend><h2>Адрес</h2></legend>
+          <div class="form-group text-inputs-group last">
+            <TextField
+              :id="'zipCode'"
+              :label="'Индекс'"
+              :value="address.zipCode"
+              @input="address.zipCode = $event"
+            />
+            <TextField
+              :id="'country'"
+              :label="'Страна'"
+              :value="address.country"
+              @input="address.country = $event"
+            />
+            <TextField
+              :id="'region'"
+              :label="'Область'"
+              :value="address.region"
+              @input="address.region = $event"
+            />
+            <TextField
+              :id="'city'"
+              :label="'Город'"
+              :hasError="$v.address.city.$error"
+              :errorMsg="messages.required"
+              :value="address.city"
+              :isRequired="true"
+              @input="address.city = $event"
+            />
+            <TextField
+              :id="'street'"
+              :label="'Улица'"
+              :value="address.street"
+              @input="address.street = $event"
+            />
+            <TextField
+              :id="'building'"
+              :label="'Дом'"
+              :value="address.building"
+              @input="address.building = $event"
+            />
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend><h2>Удостоверение личности</h2></legend>
           <Select
-            :label="'Группа клиентов'"
-            :id="'tags'"
-            :hasError="$v.tags.$error"
-            :errorMsg="'не может быть пустой!'"
-            :data="data.tags"
-            v-model="tags"
-            :multiple="true"
+            :label="'Тип документа'"
+            :id="'id'"
+            :data="data.ids"
+            :isRequired="true"
+            v-model="id.type"
           />
-          <Select
-            :label="'Лечащий врач'"
-            :id="'attendingDr'"
-            :data="data.doctors"
-            v-model="attendingDr"
-            :firstOptionEmpty="true"
-          />
-        </div>
-      </div>
-      <div class="form-group">
-        <Checkbox
-          :label="'Не отправлять СМС'"
-          :id="'noSms'"
-          @change="noSms = $event"
-        />
-      </div>
-      <Button :text="'Создать'" />
-    </form>
+          <div class="form-group text-inputs-group last">
+            <TextField
+              :id="'issue'"
+              :label="'Серия'"
+              :value="id.issue"
+              @input="id.issue = $event"
+            />
+            <TextField
+              :id="'number'"
+              :label="'Номер'"
+              :value="id.number"
+              @input="id.number = $event"
+            />
+            <TextField
+              :id="'issuer'"
+              :label="'Кем выдан'"
+              :value="id.issuer"
+              @input="id.issuer = $event"
+            />
+            <TextField
+              :id="'issuingDate'"
+              :label="'Когда выдан'"
+              :value="id.issuingDate"
+              :hasError="$v.id.issuingDate.$error"
+              :errorMsg="messages.required"
+              :isRequired="true"
+              @input="id.issuingDate = $event"
+            />
+          </div>
+        </fieldset>
+        <div class="fine-print">*Поле обязательно для заполнения.</div>
+        <Button :text="'Создать'" />
+      </form>
+    </div>
   </div>
 </template>
 
@@ -120,6 +214,16 @@ const data = {
     Захаров: "Захаров",
     Чернышева: "Чернышева",
   },
+  ids: {
+    Паспорт: "Паспорт",
+    "Свидетельство о рождении": "Свидетельство о рождении",
+    "Вод. удостоверение": "Вод. удостоверение",
+  },
+};
+
+const messages = {
+  required: "Не может быть пустым!",
+  phone: "Не может быть пустым, состоит из 11 цифр и начинается с 7!",
 };
 
 export default {
@@ -127,6 +231,7 @@ export default {
   data() {
     return {
       data,
+      messages,
       lastName: "",
       firstName: "",
       patronymic: "",
@@ -136,6 +241,21 @@ export default {
       tags: [],
       attendingDr: "",
       noSms: false,
+      address: {
+        city: "",
+        zipCode: "",
+        country: "",
+        region: "",
+        street: "",
+        building: "",
+      },
+      id: {
+        type: "",
+        issue: "",
+        number: "",
+        issuer: "",
+        issuingDate: "",
+      },
     };
   },
   components: {
@@ -155,8 +275,13 @@ export default {
       minLength: minLength(11),
       maxLength: maxLength(11),
     },
-    patronymic: {},
     tags: { required },
+    address: {
+      city: { required },
+    },
+    id: {
+      issuingDate: { required },
+    },
   },
   methods: {
     submit() {
@@ -183,8 +308,19 @@ body {
   font-family: "Roboto", sans-serif;
 }
 
+fieldset {
+  @include border(1px, $prussian-blue);
+  @include my(30px);
+  border-style: dotted;
+}
+
 .form-group {
-  @include py(25px);
+  @include py(20px);
+  border-bottom: 1px dotted $prussian-blue;
+
+  &.last {
+    border-bottom: 0;
+  }
 }
 
 .text-inputs-group {
@@ -196,15 +332,21 @@ body {
 
 .radio-group {
   @include mx(auto);
+  @include mt(15px);
   width: fit-content;
 }
 
 .list-group {
   display: flex;
+  flex-wrap: wrap;
 }
 
 .text-transform-uppercase {
   @include uppercase;
+}
+
+.text-align-center {
+  text-align: center;
 }
 
 .patient-form {
@@ -219,5 +361,12 @@ body {
   @include mx(auto);
   @include uppercase;
   width: fit-content;
+}
+
+.fine-print {
+  @include mb(30px);
+  text-align: center;
+  font-style: italic;
+  font-size: 15px;
 }
 </style>

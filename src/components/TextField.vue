@@ -7,12 +7,12 @@
       type="text"
       :class="['text-field', { 'has-error': hasError }]"
       :id="id"
-      :placeholder="label"
+      :placeholder="`${label}${isRequired ? '*' : ''}`"
       :value="value"
       @input="$emit('input', $event.target.value)"
     />
     <div class="error" v-if="hasError">
-      {{ `${label} ${errorMsg}` }}
+      {{ errorMsg }}
     </div>
   </div>
 </template>
@@ -26,9 +26,13 @@ export default {
     label: String,
     errorMsg: {
       type: String,
-      default: "содержит ошибку!",
+      default: "Поле содержит ошибку!",
     },
     hasError: {
+      type: Boolean,
+      default: false,
+    },
+    isRequired: {
       type: Boolean,
       default: false,
     },
