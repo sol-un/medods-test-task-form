@@ -1,5 +1,6 @@
-# medods-test-task-form
+# Patient Form w/ Validation
 
+This form was developed in Vue as a test task for the company MEDODS.
 ## Project setup
 ```
 npm install
