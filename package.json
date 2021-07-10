@@ -56,7 +56,7 @@
   "lint-staged": {
     "*.{js,jsx,vue}": [
       "vue-cli-service lint",
-      "git add"
+      "git add ."
     ]
   },
   "readme": "ERROR: No README data found!"

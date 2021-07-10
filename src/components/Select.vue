@@ -7,6 +7,7 @@
       :id="id"
       :multiple="multiple"
       @input="$emit('input', $event.target.value)"
+      :class="{ 'has-error': errors && errors.$invalid && errors.$dirty }"
     >
       <option value="" v-if="firstOptionEmpty"></option>
       <option v-for="(value, key) in data" :key="key" :value="key">
@@ -74,6 +75,10 @@ select {
 
   &:focus-visible {
     outline: none;
+  }
+
+  &.has-error {
+    border: 1px solid $imperial-red;
   }
 }
 
