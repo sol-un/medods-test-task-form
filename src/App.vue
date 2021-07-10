@@ -2,7 +2,7 @@
   <div id="app">
     <div class="patient-form">
       <h1>Новый клиент</h1>
-      <form @submit.prevent="submit">
+      <form autocomplete="off" @submit.prevent="submit">
         <fieldset>
           <legend><h2>Общие сведения</h2></legend>
           <div class="form-group text-inputs-group">
