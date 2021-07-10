@@ -5,14 +5,17 @@
     </label>
     <input
       type="text"
-      :class="['text-field', { 'has-error': hasError }]"
+      :class="[
+        'text-field',
+        { 'has-error': errors && errors.$invalid && errors.$dirty },
+      ]"
       :id="id"
-      :placeholder="`${label}${isRequired ? '*' : ''}`"
+      :placeholder="`${label}${this.isRequired ? '*' : ''}`"
       :value="value"
       @input="$emit('input', $event.target.value)"
     />
-    <div class="error" v-if="hasError">
-      {{ errorMsg }}
+    <div class="error" v-if="errors && errors.$invalid && errors.$dirty">
+      {{ formatErrorMsg(label, errors) }}
     </div>
   </div>
 </template>
@@ -20,22 +23,31 @@
 <script>
 export default {
   name: "TextField",
+  data() {
+    return {
+      isRequired: this.errors?.required !== undefined,
+      messages: {
+        required: "обязательно для заполнения",
+        numeric: "состоит из цифр",
+        minLength: `содержит не менее ${this.errors?.$params.minLength?.min} символов`,
+        maxLength: `содержит не более ${this.errors?.$params.maxLength?.max} символов`,
+        isFirstCharSeven: "начинается с 7",
+      },
+    };
+  },
+  methods: {
+    formatErrorMsg(fieldName, errors) {
+      const errorMsgs = Object.keys(errors)
+        .filter((key) => key[0] !== "$" && !errors[key])
+        .map((key) => this.messages[key]);
+      return `Поле "${fieldName}" ${errorMsgs.join(", ")}!`;
+    },
+  },
   props: {
     value: String,
     id: String,
     label: String,
-    errorMsg: {
-      type: String,
-      default: "Поле содержит ошибку!",
-    },
-    hasError: {
-      type: Boolean,
-      default: false,
-    },
-    isRequired: {
-      type: Boolean,
-      default: false,
-    },
+    errors: Object,
   },
 };
 </script>
@@ -82,13 +94,11 @@ export default {
 }
 
 .form-text-input {
-  position: relative;
   flex: 1 1 350px;
 }
 
 .error {
-  position: absolute;
-  left: 10px;
+  @include ml(10px);
   color: $imperial-red;
   font-size: 10px;
 }

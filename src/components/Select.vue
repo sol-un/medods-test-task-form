@@ -1,48 +1,53 @@
 <template>
-  <div class="container">
+  <div>
     <label class="form-label" :for="id"
-      >{{ `${label}${isRequired ? "*" : ""}` }}
-      <select
-        :id="id"
-        :multiple="multiple"
-        @input="$emit('input', $event.target.value)"
-      >
-        <option value="" v-if="firstOptionEmpty"></option>
-        <option v-for="(value, key) in data" :key="key" :value="key">
-          {{ value }}
-        </option>
-      </select>
+      >{{ `${label}${this.isRequired ? "*" : ""}` }}
     </label>
-    <div class="error" v-if="hasError">
-      {{ errorMsg }}
-    </div>
+    <select
+      :id="id"
+      :multiple="multiple"
+      @input="$emit('input', $event.target.value)"
+    >
+      <option value="" v-if="firstOptionEmpty"></option>
+      <option v-for="(value, key) in data" :key="key" :value="key">
+        {{ value }}
+      </option>
+    </select>
+    <span class="error" v-if="errors && errors.$invalid && errors.$dirty">
+      {{ formatErrorMsg(label, errors) }}
+    </span>
   </div>
 </template>
 
 <script>
 export default {
   name: "Select",
+  data() {
+    return {
+      isRequired: this.errors?.required !== undefined,
+      messages: {
+        required: "обязательно для заполнения",
+      },
+    };
+  },
+  methods: {
+    formatErrorMsg(fieldName, errors) {
+      const errorMsgs = Object.keys(errors)
+        .filter((key) => key[0] !== "$" && !errors[key])
+        .map((key) => this.messages[key]);
+      return `Поле "${fieldName}" ${errorMsgs.join(", ")}!`;
+    },
+  },
   props: {
     id: String,
     label: String,
     data: Object,
-    hasError: {
-      type: Boolean,
-      default: false,
-    },
-    errorMsg: {
-      type: String,
-      default: "Содержит ошибку!",
-    },
+    errors: Object,
     multiple: {
       type: Boolean,
       default: false,
     },
     firstOptionEmpty: {
-      type: Boolean,
-      default: false,
-    },
-    isRequired: {
       type: Boolean,
       default: false,
     },
@@ -54,13 +59,9 @@ export default {
 @import "../scss/mixins.scss";
 @import "../scss/colors.scss";
 
-.container {
-  @include mx(auto);
-  position: relative;
-  width: fit-content;
-}
-
 label {
+  @include mt(10px);
+  @include mb(5px);
   @include uppercase;
   display: block;
 }
@@ -68,7 +69,6 @@ label {
 select {
   @include p(5px);
   @include mx(auto);
-  @include my(5px);
   display: block;
   width: 100%;
 
@@ -78,7 +78,6 @@ select {
 }
 
 .error {
-  position: absolute;
   color: $imperial-red;
   font-size: 10px;
 }

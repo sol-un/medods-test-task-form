@@ -9,19 +9,15 @@
             <TextField
               :id="'lastName'"
               :label="'Фамилия'"
-              :hasError="$v.lastName.$error"
-              :errorMsg="messages.required"
+              :errors="$v.lastName"
               :value="lastName"
-              :isRequired="true"
               @input="lastName = $event"
             />
             <TextField
               :id="'firstName'"
               :label="'Имя'"
-              :hasError="$v.firstName.$error"
-              :errorMsg="messages.required"
+              :errors="$v.firstName"
               :value="firstName"
-              :isRequired="true"
               @input="firstName = $event"
             />
             <TextField
@@ -33,19 +29,15 @@
             <TextField
               :id="'birthDate'"
               :label="'Дата рождения'"
-              :hasError="$v.birthDate.$error"
-              :errorMsg="messages.required"
+              :errors="$v.birthDate"
               :value="birthDate"
-              :isRequired="true"
               @input="birthDate = $event"
             />
             <TextField
               :id="'phone'"
               :label="'Номер телефона'"
-              :hasError="$v.phone.$error"
-              :errorMsg="messages.phone"
+              :errors="$v.phone"
               :value="phone"
-              :isRequired="true"
               @input="phone = $event"
             />
           </div>
@@ -69,25 +61,21 @@
             </div>
           </div>
           <div class="form-group">
-            <div class="list-group">
-              <Select
-                :label="'Группа клиентов'"
-                :id="'tags'"
-                :hasError="$v.tags.$error"
-                :errorMsg="messages.required"
-                :data="data.tags"
-                :isRequired="true"
-                :multiple="true"
-                v-model="tags"
-              />
-              <Select
-                :label="'Лечащий врач'"
-                :id="'attendingDr'"
-                :data="data.doctors"
-                v-model="attendingDr"
-                :firstOptionEmpty="true"
-              />
-            </div>
+            <Select
+              :label="'Группа клиентов'"
+              :id="'tags'"
+              :errors="$v.tags"
+              :data="data.tags"
+              :multiple="true"
+              v-model="tags"
+            />
+            <Select
+              :label="'Лечащий врач'"
+              :id="'attendingDr'"
+              :data="data.doctors"
+              v-model="attendingDr"
+              :firstOptionEmpty="true"
+            />
           </div>
           <div class="form-group last">
             <Checkbox
@@ -103,8 +91,7 @@
             <TextField
               :id="'zipCode'"
               :label="'Индекс'"
-              :hasError="$v.address.zipCode.$error"
-              :errorMsg="messages.numeric"
+              :errors="$v.address.zipCode"
               :value="address.zipCode"
               @input="address.zipCode = $event"
             />
@@ -123,10 +110,8 @@
             <TextField
               :id="'city'"
               :label="'Город'"
-              :hasError="$v.address.city.$error"
-              :errorMsg="messages.required"
+              :errors="$v.address.city"
               :value="address.city"
-              :isRequired="true"
               @input="address.city = $event"
             />
             <TextField
@@ -147,25 +132,24 @@
           <legend><h2>Удостоверение личности</h2></legend>
           <Select
             :label="'Тип документа'"
-            :id="'id'"
+            :id="'type'"
+            :errors="$v.id.type"
             :data="data.ids"
-            :isRequired="true"
             v-model="id.type"
+            :firstOptionEmpty="true"
           />
           <div class="form-group text-inputs-group last">
             <TextField
               :id="'issue'"
               :label="'Серия'"
-              :hasError="$v.id.issue.$error"
-              :errorMsg="messages.numeric"
+              :errors="$v.id.issue"
               :value="id.issue"
               @input="id.issue = $event"
             />
             <TextField
               :id="'number'"
               :label="'Номер'"
-              :hasError="$v.id.number.$error"
-              :errorMsg="messages.numeric"
+              :errors="$v.id.number"
               :value="id.number"
               @input="id.number = $event"
             />
@@ -179,9 +163,7 @@
               :id="'issuingDate'"
               :label="'Когда выдан'"
               :value="id.issuingDate"
-              :hasError="$v.id.issuingDate.$error"
-              :errorMsg="messages.required"
-              :isRequired="true"
+              :errors="$v.id.issuingDate"
               @input="id.issuingDate = $event"
             />
           </div>
@@ -227,18 +209,11 @@ const data = {
   },
 };
 
-const messages = {
-  required: "Не может быть пустым!",
-  numeric: "Состоит из цифр!",
-  phone: "Не может быть пустым, состоит из 11 цифр и начинается с 7!",
-};
-
 export default {
   name: "App",
   data() {
     return {
       data,
-      messages,
       lastName: "",
       firstName: "",
       patronymic: "",
@@ -277,6 +252,7 @@ export default {
     firstName: { required },
     birthDate: { required },
     phone: {
+      required,
       numeric,
       isFirstCharSeven,
       minLength: minLength(11),
@@ -288,6 +264,7 @@ export default {
       zipCode: { numeric },
     },
     id: {
+      type: { required },
       issue: { numeric },
       number: { numeric },
       issuingDate: { required },
@@ -353,11 +330,6 @@ fieldset {
   @include mx(auto);
   @include mt(15px);
   width: fit-content;
-}
-
-.list-group {
-  display: flex;
-  flex-wrap: wrap;
 }
 
 .text-transform-uppercase {
