@@ -66,7 +66,7 @@ export default {
     outline: none;
 
     &::placeholder {
-      color: white;
+      text-align: right;
     }
   }
 

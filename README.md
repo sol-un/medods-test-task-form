@@ -1,6 +1,6 @@
 # Patient Form w/ Validation
 
-This form was developed in Vue as a test task for the company MEDODS.
+This form was developed in Vue as a test task for the company MEDODS. It's available online at https://sol-un.github.io/medods-test-task-form/
 ## Project setup
 ```
 npm install
