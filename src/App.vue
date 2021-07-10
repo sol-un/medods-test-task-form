@@ -103,6 +103,8 @@
             <TextField
               :id="'zipCode'"
               :label="'Индекс'"
+              :hasError="$v.address.zipCode.$error"
+              :errorMsg="messages.numeric"
               :value="address.zipCode"
               @input="address.zipCode = $event"
             />
@@ -154,12 +156,16 @@
             <TextField
               :id="'issue'"
               :label="'Серия'"
+              :hasError="$v.id.issue.$error"
+              :errorMsg="messages.numeric"
               :value="id.issue"
               @input="id.issue = $event"
             />
             <TextField
               :id="'number'"
               :label="'Номер'"
+              :hasError="$v.id.number.$error"
+              :errorMsg="messages.numeric"
               :value="id.number"
               @input="id.number = $event"
             />
@@ -223,6 +229,7 @@ const data = {
 
 const messages = {
   required: "Не может быть пустым!",
+  numeric: "Состоит из цифр!",
   phone: "Не может быть пустым, состоит из 11 цифр и начинается с 7!",
 };
 
@@ -278,8 +285,11 @@ export default {
     tags: { required },
     address: {
       city: { required },
+      zipCode: { numeric },
     },
     id: {
+      issue: { numeric },
+      number: { numeric },
       issuingDate: { required },
     },
   },
