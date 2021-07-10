@@ -94,11 +94,13 @@ export default {
 }
 
 .form-text-input {
+  position: relative;
   flex: 1 1 350px;
 }
 
 .error {
   @include ml(10px);
+  position: absolute;
   color: $imperial-red;
   font-size: 10px;
 }

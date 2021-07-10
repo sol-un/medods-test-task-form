@@ -32,9 +32,8 @@ export default {
 @import "../scss/colors.scss";
 
 label {
-  @include p(10px);
   @include uppercase;
-  position: relative;
+  @include p(10px);
   text-transform: uppercase;
 
   &:hover {

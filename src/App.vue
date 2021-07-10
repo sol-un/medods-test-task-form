@@ -40,9 +40,6 @@
               :value="phone"
               @input="phone = $event"
             />
-          </div>
-          <div class="form-group text-align-center">
-            <span class="text-transform-uppercase">Пол</span>
             <div class="radio-group">
               <Radio
                 :name="'sex'"
@@ -77,7 +74,7 @@
               :firstOptionEmpty="true"
             />
           </div>
-          <div class="form-group last">
+          <div class="form-group">
             <Checkbox
               :label="'Не отправлять СМС'"
               :id="'noSms'"
@@ -312,11 +309,6 @@ fieldset {
 
 .form-group {
   @include py(20px);
-  border-bottom: 1px dotted $prussian-blue;
-
-  &.last {
-    border-bottom: 0;
-  }
 }
 
 .text-inputs-group {
@@ -324,12 +316,11 @@ fieldset {
   flex-wrap: wrap;
   grid-row-gap: 25px;
   grid-column-gap: 25px;
+  align-items: center;
 }
 
 .radio-group {
-  @include mx(auto);
-  @include mt(15px);
-  width: fit-content;
+  align-self: center;
 }
 
 .text-transform-uppercase {
