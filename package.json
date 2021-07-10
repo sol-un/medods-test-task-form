@@ -51,10 +51,7 @@
   ],
   "_id": "medods-test-task-form@0.1.0",
   "gitHooks": {
-    "pre-commit": [
-      "lint-staged",
-      "rebuild"
-    ]
+    "pre-commit": "npm run build && lint-staged"
   },
   "lint-staged": {
     "*.{js,jsx,vue}": [
@@ -62,6 +59,5 @@
       "git add"
     ]
   },
-  "rebuild": "npm run build",
   "readme": "ERROR: No README data found!"
 }
